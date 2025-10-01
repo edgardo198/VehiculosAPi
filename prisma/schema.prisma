@@ -1,0 +1,40 @@
+datasource db {
+  provider = "mysql"          
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Vehicle {
+  id        Int        @id @default(autoincrement())
+  brand     String
+  model     String
+  plate     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  movements Movement[]
+}
+
+enum MovementType {
+  ENTRY
+  EXIT
+}
+
+model Movement {
+  id          Int          @id @default(autoincrement())
+  vehicleId   Int
+  driverName  String
+  type        MovementType
+  dateTime    DateTime
+  odometerKm  Int
+  createdAt   DateTime     @default(now())
+
+  vehicle     Vehicle      @relation(fields: [vehicleId], references: [id])
+
+  @@index([vehicleId, dateTime])
+  @@index([driverName])
+  @@index([dateTime])
+}
+
