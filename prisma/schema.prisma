@@ -1,10 +1,12 @@
-datasource db {
-  provider = "mysql"          
-  url      = env("DATABASE_URL")
-}
+// prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Vehicle {
@@ -26,7 +28,7 @@ model Movement {
   id          Int          @id @default(autoincrement())
   vehicleId   Int
   driverName  String
-  type        MovementType
+  type       MovementType
   dateTime    DateTime
   odometerKm  Int
   createdAt   DateTime     @default(now())
